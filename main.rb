@@ -1,8 +1,14 @@
 require 'sinatra'
 require 'telegram/bot'
 
-
-token = "5871038331:AAH-e3CYF37WXpY_sRiDHI7q9TonLAtUj6M"
+# disable :protection
+# use Rack::Protection, :host_authorization => false
+# use Rack::Protection, except: [:all]
+disable :protection
+configure do
+  disable :protection
+end
+token = "token"
 chat_id = 1407232708
 bot = Telegram::Bot::Client.new(token)
 Thread.new do
@@ -15,8 +21,14 @@ Thread.new do
 end
 
 post "/" do
+  session.clear
   data = JSON.parse request.body.read
   msg = "Студент (#{data['username']}) не сможет прийти на пару \n подробности: #{data['desc']}"
   bot.api.send_message(chat_id: chat_id, text: msg) 
   "done"
+end
+
+get "/" do
+  session.clear
+    "test"
 end
